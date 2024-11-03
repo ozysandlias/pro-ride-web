@@ -1,0 +1,190 @@
+[gd_scene load_steps=14 format=3 uid="uid://j8vf762b0n5g"]
+
+[ext_resource type="PackedScene" uid="uid://eyw1jo4kgmwf" path="res://Scenes/player.tscn" id="1_fchwv"]
+[ext_resource type="PackedScene" uid="uid://bnh6r5n4n0ptc" path="res://Scenes/block.tscn" id="2_drj0w"]
+[ext_resource type="PackedScene" uid="uid://bt6uuesty5qk1" path="res://Assets/halfpipe.dae" id="4_6mlka"]
+[ext_resource type="AudioStream" uid="uid://cgly4pxpuqjqi" path="res://Assets/LoungeBossaNova.mp3" id="4_vu5nb"]
+[ext_resource type="Texture2D" uid="uid://bajgprm4wpiie" path="res://Assets/Grid/Orange/texture_02.png" id="5_w5bg8"]
+[ext_resource type="Texture2D" uid="uid://dasgr46dirctp" path="res://Assets/Grid/Purple/texture_04.png" id="6_djx5m"]
+[ext_resource type="Script" path="res://Scenes/Label.gd" id="7_f6r11"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_px6c7"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_504in"]
+sky_material = SubResource("ProceduralSkyMaterial_px6c7")
+
+[sub_resource type="Environment" id="Environment_6tx3e"]
+background_mode = 2
+sky = SubResource("Sky_504in")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_c5goh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xukgh"]
+albedo_texture = ExtResource("5_w5bg8")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6mdbt"]
+albedo_texture = ExtResource("6_djx5m")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[node name="Game" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6tx3e")
+
+[node name="CharacterBody3D" parent="." instance=ExtResource("1_fchwv")]
+transform = Transform3D(1, 0, 1.06581e-14, 0, 1, 0, -1.06581e-14, 0, 1, 1, 13.073, 49)
+camera_speed = 1.7
+metadata/_edit_group_ = true
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06668, 0)
+shape = SubResource("SphereShape3D_c5goh")
+spring_length = 3.0
+margin = 1.0
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, -1.49012e-08, 0, 1.49012e-08, 1, 0, 0, 0)
+h_offset = 0.56
+fov = 80.0
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06668, 0)
+remote_path = NodePath("../SpringArm3D")
+update_rotation = false
+update_scale = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_vu5nb")
+volume_db = -16.865
+autoplay = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("7_f6r11")
+
+[node name="Level" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -9.17939e-08, 0, 1, 0, 8.74228e-08, 0, -1.05, 8.5256, 2, -9.9677)
+
+[node name="halfpipe" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.32598e-08, 0, -0.952381, 17, 0, -11.3978)
+metadata/_edit_group_ = true
+
+[node name="halfpipe2" parent="Level/halfpipe" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe3" parent="Level" instance=ExtResource("4_6mlka")]
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe3" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe6" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(-1, -8.74228e-08, -1.74846e-07, 8.74228e-08, -1, 7.64274e-15, -1.6652e-07, -7.27881e-15, 0.952381, 17, 13, 7.61905)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe6" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 4.443e-28, 1, 0, 0, 0, 1, 9.53674e-07, 0, -3.96765)
+
+[node name="halfpipe5" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, 0, 0, 0.952381, 9.53674e-07, 0, -7.61905)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe5" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe10" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(-4.37112e-08, 0, 1, 0, 1, 0, -0.952381, 0, -4.16297e-08, 14, 0, 11.4286)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe10" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe11" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(-4.37112e-08, 0, 1, 0, 1, 0, -0.952381, 0, -4.16297e-08, 7, 0, 11.4286)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe11" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe12" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, 0, 0, 0.952381, -5, 17, 7.61905)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe12" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53674e-07, 0, -3.96765)
+
+[node name="halfpipe13" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, 0, 0, 0.952381, -5.29999, 12.5, -51.4286)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe13" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe4" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(-1, 0, -8.74232e-08, 0, 1, 0, 8.32602e-08, 0, -0.952381, 17, 0, -3.80952)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe4" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="halfpipe7" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(-1, 0, -8.74232e-08, 0, 1, 0, 8.32602e-08, 0, -0.952381, 17, 0, 3.80953)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe7" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.53674e-07, 0, -3.96765)
+
+[node name="halfpipe8" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 8.74228e-08, 2.62269e-07, 8.74228e-08, -1, 7.64274e-15, 2.4978e-07, 1.45576e-14, -0.952381, 0, 13, 3.80952)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe8" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 1.3363e-21, 0, 1.33631e-21, 1, 0, 0, 0, 1, -9.53674e-07, 0, -3.96765)
+
+[node name="halfpipe9" parent="Level" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 4.33431e-13, 0, 1, 0, -3.83693e-13, 0, 0.952381, -9.53674e-07, 0, 7.61905)
+metadata/_edit_group_ = true
+
+[node name="halfpipe4" parent="Level/halfpipe9" instance=ExtResource("4_6mlka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.96765)
+
+[node name="StaticBody3D2" parent="Level" instance=ExtResource("2_drj0w")]
+transform = Transform3D(-0.016, 0, 7.05939e-10, 0, 0.5, 0, -1.33216e-09, 0, -0.00769048, 8.5256, 15.2, 5.74505)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Level"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.32598e-08, 0, -0.952381, 8.5256, 4, -9.49305)
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Level/CSGCombiner3D"]
+transform = Transform3D(0.999985, 0, -2.6258e-20, 0, 1, 0, 2.35475e-19, 0, 0.999985, 1.70001, 6, 38.25)
+size = Vector3(20.4, 1, 26.5)
+material = SubResource("StandardMaterial3D_xukgh")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Level/CSGCombiner3D"]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -7, -6, 19)
+polygon = PackedVector2Array(-15, 0, -6, 7, -6, 7, -6, -1)
+depth = 13.81
+material = SubResource("StandardMaterial3D_6mdbt")
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Level/CSGCombiner3D"]
+transform = Transform3D(-4.37113e-08, 0, 0.999999, 0, 1, 0, -0.999999, 0, -4.37113e-08, 11.5, 6.5, 26)
+polygon = PackedVector2Array(-15, 0, 1, 4, 1, 4, 1, 0)
+depth = 20.0
+material = SubResource("StandardMaterial3D_6mdbt")
+
+[node name="StaticBody3D" parent="Level" instance=ExtResource("2_drj0w")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.32598e-08, 0, -0.952381, 8.5256, -1.5, -9.49305)
